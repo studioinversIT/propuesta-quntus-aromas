@@ -7,7 +7,7 @@
 <meta name="description" content="Propuesta de ecosistema de ventas en línea para Quntus Aromas Selváticos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css">
 <link rel="preload" as="image" href="img/hero-selva.jpg">
 <style>
@@ -26,8 +26,8 @@
   --amber:   #b9813a;
   --amber-l: #f1e3c8;
 
-  --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
-  --sans:  'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --r-out: 28px;
   --r-in:  22px;
@@ -50,8 +50,9 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.62;
   font-weight: 400;
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
 }
@@ -70,18 +71,19 @@ body::after {
 section { padding: 112px 0; }
 @media (max-width: 767px) { .wrap { padding: 0 16px; } section { padding: 72px 0; } }
 
-h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.08; letter-spacing: -.01em; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.06; letter-spacing: -.022em; text-wrap: balance; font-optical-sizing: auto; font-variant-numeric: lining-nums; }
+h3 { font-weight: 500; letter-spacing: -.012em; }
 h2 { font-size: var(--step-3); margin-bottom: 20px; }
 h3 { font-size: var(--step-1); line-height: 1.2; margin-bottom: 8px; }
-h2 em, h1 em { font-style: italic; font-weight: 500; color: var(--leaf); padding-bottom: .06em; }
+h1 em { font-style: italic; font-weight: 400; padding-bottom: .06em; }
 p { text-wrap: pretty; }
 .lead { font-size: 1.125rem; color: var(--ink-2); max-width: 60ch; }
 .muted { color: var(--ink-3); }
+.tag::before { content: ''; width: 24px; height: 1px; background: currentColor; }
 .tag {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
-  padding: 6px 14px; border-radius: 999px;
-  background: rgba(79,125,54,.1); color: var(--leaf); margin-bottom: 22px;
+  font-size: 15px; font-weight: 500; letter-spacing: 0;
+  color: var(--leaf); margin-bottom: 18px;
 }
 .num { font-variant-numeric: lining-nums tabular-nums; }
 
@@ -125,12 +127,12 @@ p { text-wrap: pretty; }
   background: linear-gradient(180deg, rgba(14,28,19,.55) 0%, rgba(14,28,19,.15) 35%, rgba(14,28,19,.78) 75%, rgba(14,28,19,.94) 100%); }
 .hero-top { position: absolute; top: 28px; left: 0; right: 0; z-index: 2; }
 .hero-top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.brand-pair { display: flex; align-items: center; gap: 16px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: rgba(244,240,226,.75); }
+.brand-pair { display: flex; align-items: center; gap: 12px; font-size: 15px; color: rgba(244,240,226,.75); }
 .brand-pair img { height: 64px; width: auto; }
 .brand-pair .x { opacity: .5; }
 .hero-date { font-size: 13px; color: rgba(244,240,226,.7); }
 .hero-body { position: relative; z-index: 2; width: 100%; padding: 0 0 72px; }
-.hero h1 { font-size: var(--step-4); max-width: 13ch; margin-bottom: 22px; line-height: 1.04; }
+.hero h1 { font-size: var(--step-4); max-width: 14ch; margin-bottom: 22px; line-height: 1.02; letter-spacing: -.025em; }
 .hero h1 em { color: #e3c48c; }
 .hero p { font-size: 1.15rem; max-width: 46ch; color: rgba(244,240,226,.82); margin-bottom: 34px; }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
@@ -149,16 +151,16 @@ p { text-wrap: pretty; }
 .pain { display: grid; grid-template-columns: 44px 1fr; gap: 8px; padding: 26px 0; border-bottom: 1px solid var(--line); }
 .pain i { font-size: 26px; color: var(--leaf); margin-top: 2px; }
 .pain p { color: var(--ink-2); font-size: .975rem; max-width: 56ch; }
-.quote { margin-top: 44px; font-family: var(--serif); font-size: var(--step-2); line-height: 1.25; font-style: italic; font-weight: 500; color: var(--forest-2); }
-.quote cite { display: block; margin-top: 14px; font: 400 14px/1.4 var(--sans); font-style: normal; color: var(--ink-3); }
+.quote { margin-top: 44px; font-family: var(--serif); font-size: var(--step-2); line-height: 1.25; font-style: italic; font-weight: 400; color: var(--forest-2); text-indent: -.42em; hanging-punctuation: first; }
+.quote cite { text-indent: 0; display: block; margin-top: 14px; font: 400 14px/1.4 var(--sans); font-style: normal; color: var(--ink-3); }
 @media (max-width: 767px) { .listen { grid-template-columns: 1fr; gap: 36px; } .listen-photo { position: static; } .listen-photo img { aspect-ratio: 4/3; } }
 
 /* ───────── CIFRAS ───────── */
 .figures { background: var(--forest); color: #f1ede0; padding: 88px 0; }
 .fig-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; align-items: end; }
-.fig b { display: block; font-family: var(--serif); font-weight: 600; font-size: clamp(3rem, 2rem + 4vw, 5.4rem); line-height: 1; color: #e3c48c; letter-spacing: -.02em; }
+.fig b { display: block; font-family: var(--serif); font-weight: 400; font-variant-numeric: lining-nums; font-size: clamp(3rem, 2rem + 4vw, 5.4rem); line-height: 1; color: #e3c48c; letter-spacing: -.02em; }
 .fig span { display: block; margin-top: 12px; font-size: 15px; color: rgba(241,237,224,.7); max-width: 26ch; }
-.fig-note { margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(241,237,224,.14); font-family: var(--serif); font-size: var(--step-1); font-style: italic; color: rgba(241,237,224,.9); max-width: 44ch; }
+.fig-note { font-weight: 400; margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(241,237,224,.14); font-family: var(--serif); font-size: var(--step-1); font-style: italic; color: rgba(241,237,224,.9); max-width: 44ch; }
 @media (max-width: 767px) { .fig-grid { grid-template-columns: 1fr; gap: 36px; } .figures { padding: 64px 0; } }
 
 /* ───────── ACEITES ───────── */
@@ -171,7 +173,7 @@ p { text-wrap: pretty; }
 .oil.small .core { flex-direction: row; }
 .oil.small img { width: 44%; aspect-ratio: auto; object-position: 18% 55%; }
 .oil-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center; }
-.oil-role { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); font-weight: 500; }
+.oil-role { font-size: 14px; color: #8a5f27; font-weight: 500; }
 .oil-body h3 { font-size: var(--step-2); margin: 0; }
 .oil-body p { font-size: .95rem; color: var(--ink-2); }
 .oil-price { margin-top: 6px; font-weight: 500; }
@@ -188,9 +190,8 @@ p { text-wrap: pretty; }
 
 /* ───────── EXPERIENCIA ───────── */
 .exp { background: var(--forest); color: #f1ede0; position: relative; overflow: hidden; }
-.exp h2 em { color: #e3c48c; }
 .exp .lead { color: rgba(241,237,224,.75); }
-.exp .tag { background: rgba(227,196,140,.12); color: #e3c48c; }
+.exp .tag { color: #e3c48c; }
 .exp-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; margin-top: 56px; align-items: start; }
 .dshell { padding: 6px; border-radius: var(--r-out); background: rgba(241,237,224,.06); box-shadow: inset 0 0 0 1px rgba(241,237,224,.1); }
 .exp-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(241,237,224,.7); margin: 0 0 14px 6px; }
@@ -212,7 +213,7 @@ p { text-wrap: pretty; }
 .combo .c-name { display: flex; flex-direction: column; line-height: 1.3; }
 .combo small { color: var(--ink-3); font-size: 12px; }
 .combo .c-price { font-weight: 600; }
-.combo .badge { white-space: nowrap; display: inline-block; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; background: var(--amber-l); color: #7a5420; padding: 3px 8px; border-radius: 999px; margin-left: 6px; }
+.combo .badge { white-space: nowrap; display: inline-block; font-size: 11.5px; background: var(--amber-l); color: #7a5420; padding: 3px 8px; border-radius: 999px; margin-left: 6px; }
 .combo:has(input:checked) { border-color: var(--leaf); background: rgba(79,125,54,.07); box-shadow: inset 0 0 0 1px var(--leaf); }
 .combo:has(input:focus-visible) { outline: 2px solid var(--amber); outline-offset: 2px; }
 .add { margin-top: 4px; width: 100%; justify-content: space-between; background: var(--forest); color: #f4f0e2; }
@@ -249,7 +250,7 @@ p { text-wrap: pretty; }
 /* semana */
 .week { margin-top: 28px; }
 .week-row { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid rgba(241,237,224,.12); }
-.week-row b { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: #e3c48c; line-height: 1.2; }
+.week-row b { font-family: var(--serif); font-size: 1.35rem; font-weight: 400; color: #e3c48c; line-height: 1.2; }
 .week-row p { font-size: .95rem; color: rgba(241,237,224,.8); }
 .week-note { font-size: 13px; color: rgba(241,237,224,.5); margin-top: 14px; }
 .exp-foot { margin-top: 40px; font-size: 13px; color: rgba(241,237,224,.5); }
@@ -275,7 +276,7 @@ p { text-wrap: pretty; }
 .step { padding-right: 20px; position: relative; }
 .step .dot { width: 19px; height: 19px; border-radius: 50%; background: var(--bone); border: 1px solid var(--leaf); display: grid; place-items: center; margin-bottom: 22px; position: relative; }
 .step .dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
-.step small { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); font-weight: 500; }
+.step small { font-size: 14px; color: #8a5f27; font-weight: 500; }
 .step h3 { font-size: 1.35rem; margin: 6px 0 8px; }
 .step p { font-size: .9rem; color: var(--ink-2); }
 .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 72px; }
@@ -308,9 +309,9 @@ p { text-wrap: pretty; }
 .plan h3 { font-size: 2rem; margin-bottom: 6px; }
 .plan .p-sub { font-size: .95rem; color: var(--ink-2); margin-bottom: 26px; max-width: 40ch; }
 .price-row { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
-.price-row .setup { font-family: var(--serif); font-size: 3.2rem; font-weight: 600; line-height: 1; letter-spacing: -.01em; }
+.price-row .setup { font-family: var(--serif); font-size: 3.4rem; font-weight: 400; line-height: 1; letter-spacing: -.03em; font-variant-numeric: lining-nums; }
 .price-row .setup sup { font-size: 1.4rem; vertical-align: .9em; margin-right: 2px; }
-.price-row .lbl { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.price-row .lbl { display: block; font-size: 14px; color: var(--ink-3); margin-bottom: 6px; }
 .price-row .monthly { font-size: 1.3rem; font-weight: 600; color: var(--leaf); }
 .price-row .iva { width: 100%; font-size: 13px; color: var(--ink-3); }
 .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -324,7 +325,7 @@ p { text-wrap: pretty; }
 .plan.featured .price-row { border-color: rgba(241,237,224,.15); }
 .plan.featured .price-row .lbl, .plan.featured .price-row .iva { color: rgba(241,237,224,.55); }
 .plan.featured .monthly { color: #e3c48c; }
-.rec { align-self: flex-start; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: var(--amber); color: #1b130a; margin-bottom: 18px; }
+.rec { align-self: flex-start; font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: var(--amber); color: #1b130a; margin-bottom: 18px; }
 .plan-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
 .plan-notes div { padding: 20px 22px; border-radius: var(--r-sm); background: var(--paper); font-size: .92rem; color: var(--ink-2); }
 .plan-notes b { color: var(--ink); font-weight: 500; }
@@ -349,8 +350,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px;
 input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--forest); border: 3px solid var(--paper); cursor: pointer; }
 input[type=range]:focus-visible { outline: 2px solid var(--amber); outline-offset: 6px; }
 .calc-out { background: var(--forest); color: #f1ede0; padding: 34px 30px; display: flex; flex-direction: column; justify-content: center; }
-.calc-out small { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,237,224,.6); }
-.calc-out .total { font-family: var(--serif); font-size: 4rem; font-weight: 600; line-height: 1; margin: 12px 0 6px; color: #e3c48c; }
+.calc-out small { font-size: 14px; color: rgba(241,237,224,.65); }
+.calc-out .total { font-family: var(--serif); font-size: 4rem; font-weight: 400; letter-spacing: -.03em; font-variant-numeric: lining-nums; line-height: 1; margin: 12px 0 6px; color: #e3c48c; }
 .calc-out .per { font-size: 14px; color: rgba(241,237,224,.7); }
 .calc-out p { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(241,237,224,.14); font-size: 13px; color: rgba(241,237,224,.6); }
 .calc-src { font-size: 13px; color: var(--ink-3); margin: 14px 6px 0; }
@@ -374,10 +375,9 @@ input[type=range]:focus-visible { outline: 2px solid var(--amber); outline-offse
 .close::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(14,28,19,.92) 0%, rgba(14,28,19,.6) 60%, rgba(14,28,19,.35) 100%); }
 .close .wrap { position: relative; z-index: 2; }
 .close h2 { font-size: var(--step-4); max-width: 14ch; }
-.close h2 em { color: #e3c48c; }
 .close-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 220px)); gap: 28px; margin: 40px 0 44px; }
 .close-steps div { border-top: 1px solid rgba(244,240,226,.3); padding-top: 14px; font-size: .95rem; color: rgba(244,240,226,.85); }
-.close-steps b { display: block; font-family: var(--serif); font-size: 1.4rem; color: #e3c48c; font-weight: 600; margin-bottom: 4px; }
+.close-steps b { display: block; font-family: var(--serif); font-size: 1.4rem; color: #e3c48c; font-weight: 400; margin-bottom: 4px; }
 @media (max-width: 767px) { .close { padding: 96px 0; } .close-steps { grid-template-columns: 1fr; gap: 18px; } }
 
 footer { padding: 36px 0 48px; font-size: 13px; color: var(--ink-3); }
@@ -426,7 +426,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     </figure>
     <div>
       <span class="tag reveal">Lo que escuchamos</span>
-      <h2 class="reveal" style="--i:1">Un producto extraordinario <em>sin un sistema que lo venda.</em></h2>
+      <h2 class="reveal" style="--i:1">Un producto extraordinario sin un sistema que lo venda.</h2>
       <p class="lead reveal" style="--i:2">Quntus ya tiene lo más difícil: aceites que nadie más produce, 20 años de oficio y una causa real. Lo que falta es el camino entre ese frasco y la persona que lo necesita.</p>
 
       <div class="pains">
@@ -436,7 +436,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
         <div class="pain reveal"><i class="ph-light ph-book-open-text"></i><div><h3>El mercado aún no sabe para qué sirve un aceite esencial</h3><p>En Ecuador falta educación, y anunciar beneficios de salud de forma directa ya provocó un bloqueo en Meta.</p></div></div>
       </div>
 
-      <blockquote class="quote reveal">"Cuando se les explica todo, la gente se queda maravillada: tengo una medicina, no es solo oler rico."<cite>Ivonne Mosler, en nuestra reunión del 8 de octubre</cite></blockquote>
+      <blockquote class="quote reveal">“Cuando se les explica todo, la gente se queda maravillada: tengo una medicina, no es solo oler rico.”<cite>Ivonne Mosler, en nuestra reunión del 8 de octubre</cite></blockquote>
     </div>
   </div>
 </section>
@@ -456,7 +456,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <!-- ───────── ACEITES ───────── -->
 <section>
   <div class="wrap">
-    <h2 class="reveal">Empezar con tres aceites <em>para crecer rápido.</em></h2>
+    <h2 class="reveal">Empezar con tres aceites para crecer rápido.</h2>
     <p class="lead reveal" style="--i:1">La tienda tendrá todo el catálogo, pero la venta arranca con tres productos de entrada. Quien prueba el palo santo vuelve por el ishpingo, el copal y los aromas que vengan después.</p>
 
     <div class="oils">
@@ -500,7 +500,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <!-- ───────── PERFILES ───────── -->
 <section style="padding-top:0">
   <div class="wrap">
-    <h2 class="reveal">Cuatro perfiles, <em>cuatro razones de compra.</em></h2>
+    <h2 class="reveal">Cuatro perfiles, cuatro razones de compra.</h2>
     <p class="lead reveal" style="--i:1">Con la oferta definida, lanzamos anuncios con un mensaje propio para cada perfil. El que mejor responde nos dice dónde invertir.</p>
     <div class="profiles">
       <div class="profile reveal"><i class="ph-light ph-flower-lotus"></i><h3>Yoga y meditación</h3><p>Ya usa aromaterapia. Busca pureza, origen y rituales.</p></div>
@@ -515,7 +515,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <section class="exp" id="experiencia">
   <div class="wrap">
     <span class="tag reveal">Así sería trabajar juntos</span>
-    <h2 class="reveal" style="--i:1">Tú produces y despachas. <em>El sistema vende.</em></h2>
+    <h2 class="reveal" style="--i:1">Tú produces y despachas. El sistema vende.</h2>
     <p class="lead reveal" style="--i:2">Así se vería un día normal de Quntus con el sistema funcionando, desde que una persona descubre el palo santo hasta que el pedido llega a tu teléfono.</p>
 
     <div class="exp-grid">
@@ -578,7 +578,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <!-- ───────── LO QUE CONSTRUIMOS ───────── -->
 <section>
   <div class="wrap">
-    <h2 class="reveal">Lo que construimos <em>y operamos por ti.</em></h2>
+    <h2 class="reveal">Lo que construimos y operamos por ti.</h2>
     <p class="lead reveal" style="--i:1">Todo conectado en SmartInvers CRM: tienda, anuncios, mensajes y seguimiento en un solo lugar.</p>
     <div class="system">
       <div class="sys reveal">
@@ -613,7 +613,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <!-- ───────── RUTA ───────── -->
 <section style="padding-top:0">
   <div class="wrap">
-    <h2 class="reveal">De la conversación a la primera venta <em>en seis semanas.</em></h2>
+    <h2 class="reveal">De la conversación a la primera venta en seis semanas.</h2>
     <p class="lead reveal" style="--i:1">Ruta del Plan Ecosistema. El Plan Esencial se entrega en cuatro semanas, sin las etapas de anuncios.</p>
     <div class="route">
       <div class="step reveal"><div class="dot"></div><small>Semana 1</small><h3>La oferta</h3><p>Entrevista contigo para definir valor, perfiles e historia. Recibimos accesos y fotos.</p></div>
@@ -658,7 +658,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       <figcaption class="caption">Tour aromático en la finca de Quntus.</figcaption>
     </figure>
     <div>
-      <h2 class="reveal">Números simples, <em>cada semana.</em></h2>
+      <h2 class="reveal">Números simples, cada semana.</h2>
       <p class="lead reveal" style="--i:1">Un tablero para saber cuánto vende la tienda y de dónde viene cada venta.</p>
       <div class="kpis">
         <div class="kpi reveal"><b>Ventas y pedidos</b><p>Ingresos por semana y por aceite.</p></div>
@@ -676,7 +676,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <section id="planes" style="padding-top:0">
   <div class="wrap">
     <span class="tag reveal">Inversión</span>
-    <h2 class="reveal" style="--i:1">Dos caminos, <em>según el ritmo que quieras.</em></h2>
+    <h2 class="reveal" style="--i:1">Dos caminos, según el ritmo que quieras.</h2>
     <p class="lead reveal" style="--i:2">Ambos incluyen la tienda nueva y SmartInvers CRM. La diferencia es quién trae a los compradores: tú o Invers.</p>
 
     <div class="plans">
@@ -794,7 +794,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 <section class="close">
   <img class="bg" src="img/rio-aereo.jpg" alt="" loading="lazy">
   <div class="wrap">
-    <h2 class="reveal">Que el Amazonas llegue <em>a más hogares.</em></h2>
+    <h2 class="reveal">Que el Amazonas llegue a más hogares.</h2>
     <div class="close-steps">
       <div class="reveal"><b>Hoy</b>Revisamos juntos la propuesta y eliges tu plan.</div>
       <div class="reveal" style="--i:1"><b>Esta semana</b>Firmamos y agendamos la sesión de oferta.</div>
