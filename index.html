@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quntus Aromas y Invers</title>
+<meta name="description" content="Propuesta de ecosistema de ventas en línea para Quntus Aromas Selváticos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css">
+<link rel="preload" as="image" href="img/hero-selva.jpg">
+<style>
+/* Design read: propuesta editorial para una productora amazónica.
+   Paleta Bosque (verde profundo + hueso + ámbar). Dials 6 / 4 / 3. */
+:root {
+  --bone:    #f0efe7;
+  --paper:   #f8f7f2;
+  --ink:     #16231a;
+  --ink-2:   #46523f;
+  --ink-3:   #6f7967;
+  --line:    rgba(22,35,26,.12);
+  --forest:  #17301f;
+  --forest-2:#24442f;
+  --leaf:    #4f7d36;
+  --amber:   #b9813a;
+  --amber-l: #f1e3c8;
+
+  --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --r-out: 28px;
+  --r-in:  22px;
+  --r-sm:  14px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --step-0: clamp(1rem, .96rem + .2vw, 1.0625rem);
+  --step-1: clamp(1.2rem, 1.1rem + .5vw, 1.45rem);
+  --step-2: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem);
+  --step-3: clamp(2.1rem, 1.6rem + 2.2vw, 3.3rem);
+  --step-4: clamp(2.6rem, 1.8rem + 3.6vw, 4.6rem);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+img { display:block; max-width:100%; }
+a { color: inherit; }
+::selection { background: var(--amber-l); }
+
+/* grano fijo de papel */
+body::after {
+  content:''; position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+.narrow { max-width: 760px; }
+section { padding: 112px 0; }
+@media (max-width: 767px) { .wrap { padding: 0 16px; } section { padding: 72px 0; } }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.08; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-size: var(--step-3); margin-bottom: 20px; }
+h3 { font-size: var(--step-1); line-height: 1.2; margin-bottom: 8px; }
+h2 em, h1 em { font-style: italic; font-weight: 500; color: var(--leaf); padding-bottom: .06em; }
+p { text-wrap: pretty; }
+.lead { font-size: 1.125rem; color: var(--ink-2); max-width: 60ch; }
+.muted { color: var(--ink-3); }
+.tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 999px;
+  background: rgba(79,125,54,.1); color: var(--leaf); margin-bottom: 22px;
+}
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* doble bisel */
+.shell { padding: 6px; border-radius: var(--r-out); background: rgba(22,35,26,.045); box-shadow: inset 0 0 0 1px rgba(22,35,26,.06); }
+.core  { border-radius: var(--r-in); background: var(--paper); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 18px 40px -24px rgba(23,48,31,.25); overflow: hidden; }
+
+/* botón isla */
+.btn {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 8px 8px 8px 24px; border-radius: 999px;
+  font: 500 15px/1 var(--sans); text-decoration: none; white-space: nowrap;
+  background: var(--amber); color: #1b130a; border: 0; cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 200ms ease;
+}
+.btn .ico { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: rgba(27,19,10,.12); font-size: 18px; transition: transform 300ms var(--ease-out); }
+.btn:active { transform: scale(.97); }
+@media (hover:hover) and (pointer:fine) {
+  .btn:hover { background: #c79246; }
+  .btn:hover .ico { transform: translate(2px,-1px) scale(1.05); }
+}
+.btn.ghost { background: rgba(240,239,231,.12); color: #f4f0e2; box-shadow: inset 0 0 0 1px rgba(244,240,226,.25); }
+.btn.ghost .ico { background: rgba(244,240,226,.14); }
+@media (hover:hover) and (pointer:fine) { .btn.ghost:hover { background: rgba(240,239,231,.2); } }
+
+/* reveal */
+.reveal { opacity: 0; transform: translateY(28px); filter: blur(6px);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out), filter 900ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms); }
+.reveal.in { opacity: 1; transform: none; filter: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ───────── HERO ───────── */
+.hero { position: relative; min-height: 100dvh; display: flex; align-items: flex-end; color: #f4f0e2; padding: 0; overflow: hidden; background: var(--forest); }
+.hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); animation: heroIn 2.4s var(--ease-out) forwards; }
+@keyframes heroIn { from { transform: scale(1.12); opacity: .4; } to { transform: scale(1.04); opacity: 1; } }
+.hero::before { content:''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(14,28,19,.55) 0%, rgba(14,28,19,.15) 35%, rgba(14,28,19,.78) 75%, rgba(14,28,19,.94) 100%); }
+.hero-top { position: absolute; top: 28px; left: 0; right: 0; z-index: 2; }
+.hero-top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.brand-pair { display: flex; align-items: center; gap: 16px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: rgba(244,240,226,.75); }
+.brand-pair img { height: 64px; width: auto; }
+.brand-pair .x { opacity: .5; }
+.hero-date { font-size: 13px; color: rgba(244,240,226,.7); }
+.hero-body { position: relative; z-index: 2; width: 100%; padding: 0 0 72px; }
+.hero h1 { font-size: var(--step-4); max-width: 13ch; margin-bottom: 22px; line-height: 1.04; }
+.hero h1 em { color: #e3c48c; }
+.hero p { font-size: 1.15rem; max-width: 46ch; color: rgba(244,240,226,.82); margin-bottom: 34px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+@media (prefers-reduced-motion: reduce) { .hero-img { animation: none; } }
+@media (max-width: 767px) {
+  .brand-pair img { height: 48px; } .hero-date { display: none; }
+  .hero-body { padding-bottom: 48px; }
+}
+
+/* ───────── ESCUCHAMOS ───────── */
+.listen { display: grid; grid-template-columns: 5fr 6fr; gap: 64px; align-items: start; }
+.listen-photo { position: sticky; top: 32px; }
+.listen-photo img { aspect-ratio: 4/5; object-fit: cover; width: 100%; }
+.caption { font-size: 13px; color: var(--ink-3); margin-top: 12px; padding-left: 6px; }
+.pains { margin-top: 36px; border-top: 1px solid var(--line); }
+.pain { display: grid; grid-template-columns: 44px 1fr; gap: 8px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.pain i { font-size: 26px; color: var(--leaf); margin-top: 2px; }
+.pain p { color: var(--ink-2); font-size: .975rem; max-width: 56ch; }
+.quote { margin-top: 44px; font-family: var(--serif); font-size: var(--step-2); line-height: 1.25; font-style: italic; font-weight: 500; color: var(--forest-2); }
+.quote cite { display: block; margin-top: 14px; font: 400 14px/1.4 var(--sans); font-style: normal; color: var(--ink-3); }
+@media (max-width: 767px) { .listen { grid-template-columns: 1fr; gap: 36px; } .listen-photo { position: static; } .listen-photo img { aspect-ratio: 4/3; } }
+
+/* ───────── CIFRAS ───────── */
+.figures { background: var(--forest); color: #f1ede0; padding: 88px 0; }
+.fig-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; align-items: end; }
+.fig b { display: block; font-family: var(--serif); font-weight: 600; font-size: clamp(3rem, 2rem + 4vw, 5.4rem); line-height: 1; color: #e3c48c; letter-spacing: -.02em; }
+.fig span { display: block; margin-top: 12px; font-size: 15px; color: rgba(241,237,224,.7); max-width: 26ch; }
+.fig-note { margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(241,237,224,.14); font-family: var(--serif); font-size: var(--step-1); font-style: italic; color: rgba(241,237,224,.9); max-width: 44ch; }
+@media (max-width: 767px) { .fig-grid { grid-template-columns: 1fr; gap: 36px; } .figures { padding: 64px 0; } }
+
+/* ───────── ACEITES ───────── */
+.oils { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: auto auto; gap: 18px; margin-top: 48px; }
+.oil { position: relative; }
+.oil .core { height: 100%; display: flex; flex-direction: column; }
+.oil img { width: 100%; object-fit: cover; aspect-ratio: 1/1; }
+.oil.big { grid-row: span 2; }
+.oil.big img { aspect-ratio: 4/4.4; }
+.oil.small .core { flex-direction: row; }
+.oil.small img { width: 44%; aspect-ratio: auto; object-position: 18% 55%; }
+.oil-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center; }
+.oil-role { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); font-weight: 500; }
+.oil-body h3 { font-size: var(--step-2); margin: 0; }
+.oil-body p { font-size: .95rem; color: var(--ink-2); }
+.oil-price { margin-top: 6px; font-weight: 500; }
+@media (max-width: 767px) { .oils { grid-template-columns: 1fr; } .oil.big { grid-row: auto; } .oil.small .core { flex-direction: column; } .oil.small img { width: 100%; aspect-ratio: 1/1; } }
+
+/* ───────── PERFILES ───────── */
+.profiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 44px; border-top: 1px solid var(--line); }
+.profile { padding: 28px 24px 8px 0; }
+.profile + .profile { padding-left: 24px; border-left: 1px solid var(--line); }
+.profile i { font-size: 28px; color: var(--leaf); display: block; margin-bottom: 18px; }
+.profile p { font-size: .95rem; color: var(--ink-2); }
+@media (max-width: 900px) { .profiles { grid-template-columns: 1fr 1fr; } .profile:nth-child(3) { padding-left: 0; border-left: 0; } .profile:nth-child(n+3) { border-top: 1px solid var(--line); } }
+@media (max-width: 560px) { .profiles { grid-template-columns: 1fr; } .profile, .profile + .profile { padding: 24px 0 12px; border-left: 0; border-top: 1px solid var(--line); } .profile:first-child { border-top: 0; } }
+
+/* ───────── EXPERIENCIA ───────── */
+.exp { background: var(--forest); color: #f1ede0; position: relative; overflow: hidden; }
+.exp h2 em { color: #e3c48c; }
+.exp .lead { color: rgba(241,237,224,.75); }
+.exp .tag { background: rgba(227,196,140,.12); color: #e3c48c; }
+.exp-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; margin-top: 56px; align-items: start; }
+.dshell { padding: 6px; border-radius: var(--r-out); background: rgba(241,237,224,.06); box-shadow: inset 0 0 0 1px rgba(241,237,224,.1); }
+.exp-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(241,237,224,.7); margin: 0 0 14px 6px; }
+.exp-label i { font-size: 20px; color: #e3c48c; }
+
+/* ficha de producto */
+.pdp { background: var(--paper); color: var(--ink); border-radius: var(--r-in); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+.pdp img { width: 100%; height: 100%; object-fit: cover; object-position: 22% 60%; min-height: 100%; }
+.pdp-body { padding: 26px 24px; display: flex; flex-direction: column; gap: 12px; }
+.pdp-kicker { font-size: 12px; color: var(--ink-3); }
+.pdp h3 { font-size: 1.9rem; margin: 0; }
+.pdp-desc { font-size: .9rem; color: var(--ink-2); }
+.uses { display: flex; flex-wrap: wrap; gap: 6px; }
+.uses span { font-size: 12px; padding: 5px 10px; border-radius: 999px; background: rgba(79,125,54,.1); color: var(--leaf); }
+.combos { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.combo { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--r-sm); border: 1px solid var(--line); cursor: pointer; font-size: 14px; transition: border-color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out); }
+.combo:active { transform: scale(.98); }
+.combo input { position: absolute; opacity: 0; pointer-events: none; }
+.combo .c-name { display: flex; flex-direction: column; line-height: 1.3; }
+.combo small { color: var(--ink-3); font-size: 12px; }
+.combo .c-price { font-weight: 600; }
+.combo .badge { white-space: nowrap; display: inline-block; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; background: var(--amber-l); color: #7a5420; padding: 3px 8px; border-radius: 999px; margin-left: 6px; }
+.combo:has(input:checked) { border-color: var(--leaf); background: rgba(79,125,54,.07); box-shadow: inset 0 0 0 1px var(--leaf); }
+.combo:has(input:focus-visible) { outline: 2px solid var(--amber); outline-offset: 2px; }
+.add { margin-top: 4px; width: 100%; justify-content: space-between; background: var(--forest); color: #f4f0e2; }
+.add .ico { background: rgba(244,240,226,.14); }
+@media (hover:hover) and (pointer:fine) { .add:hover { background: var(--forest-2); } }
+@media (max-width: 560px) { .pdp { grid-template-columns: 1fr; } .pdp img { aspect-ratio: 4/3; } }
+
+/* chat */
+.chat { background: #e9e4d6; border-radius: var(--r-in); overflow: hidden; color: var(--ink); }
+.chat-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--forest-2); color: #f1ede0; }
+.chat-head .av { width: 38px; height: 38px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; overflow: hidden; }
+.chat-head .av img { width: 30px; }
+.chat-head b { display: block; font-weight: 500; font-size: 15px; }
+.chat-head small { font-size: 12px; opacity: .7; }
+.chat-body { padding: 18px 16px 20px; display: flex; flex-direction: column; gap: 10px; min-height: 360px; }
+.msg { max-width: 84%; padding: 10px 13px 8px; border-radius: 14px; font-size: 14px; line-height: 1.45; box-shadow: 0 1px 1px rgba(0,0,0,.06);
+  opacity: 0; transform: translateY(10px) scale(.98); transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); transition-delay: calc(var(--m) * 700ms + 200ms); }
+.msg.in-msg { align-self: flex-start; background: #fff; border-top-left-radius: 4px; }
+.msg.out-msg { align-self: flex-end; background: #d8ecc6; border-top-right-radius: 4px; }
+.msg time { display: block; text-align: right; font-size: 10.5px; color: var(--ink-3); margin-top: 3px; }
+.msg .link { display: block; margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(23,48,31,.07); font-size: 13px; }
+.chat.in .msg { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .msg { opacity: 1; transform: none; transition: none; } }
+
+/* notificaciones */
+.notifs { display: flex; flex-direction: column; gap: 10px; }
+.notif { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 18px; background: rgba(241,237,224,.09); box-shadow: inset 0 1px 0 rgba(241,237,224,.1); }
+.notif .n-ico { width: 40px; height: 40px; border-radius: 11px; background: var(--paper); display: grid; place-items: center; }
+.notif .n-ico img { width: 30px; }
+.notif b { display: block; font-weight: 500; font-size: 14.5px; color: #f4f0e2; }
+.notif span { font-size: 13.5px; color: rgba(241,237,224,.7); }
+.notif time { font-size: 12px; color: rgba(241,237,224,.5); align-self: start; }
+
+/* semana */
+.week { margin-top: 28px; }
+.week-row { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid rgba(241,237,224,.12); }
+.week-row b { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: #e3c48c; line-height: 1.2; }
+.week-row p { font-size: .95rem; color: rgba(241,237,224,.8); }
+.week-note { font-size: 13px; color: rgba(241,237,224,.5); margin-top: 14px; }
+.exp-foot { margin-top: 40px; font-size: 13px; color: rgba(241,237,224,.5); }
+@media (max-width: 900px) { .exp-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .week-row { grid-template-columns: 1fr; gap: 4px; } }
+
+/* ───────── SISTEMA ───────── */
+.system { display: grid; grid-template-columns: repeat(2, 1fr); gap: 56px 64px; margin-top: 56px; }
+.sys i { font-size: 30px; color: var(--leaf); }
+.sys h3 { margin-top: 16px; font-size: var(--step-2); }
+.sys > p { color: var(--ink-2); margin-bottom: 14px; max-width: 48ch; }
+.sys ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.sys li { display: flex; gap: 10px; font-size: .95rem; color: var(--ink-2); }
+.sys li::before { content: ''; flex: 0 0 14px; height: 1px; background: var(--amber); margin-top: .8em; }
+.scope-note { margin-top: 56px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; padding: 22px 24px; border-radius: var(--r-sm); background: var(--amber-l); color: #4e3714; }
+.scope-note i { font-size: 24px; }
+.scope-note p { font-size: .97rem; max-width: 80ch; }
+@media (max-width: 767px) { .system { grid-template-columns: 1fr; gap: 40px; } }
+
+/* ───────── RUTA ───────── */
+.route { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 56px; position: relative; }
+.route::before { content: ''; position: absolute; top: 9px; left: 0; right: 0; height: 1px; background: var(--line); }
+.step { padding-right: 20px; position: relative; }
+.step .dot { width: 19px; height: 19px; border-radius: 50%; background: var(--bone); border: 1px solid var(--leaf); display: grid; place-items: center; margin-bottom: 22px; position: relative; }
+.step .dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
+.step small { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); font-weight: 500; }
+.step h3 { font-size: 1.35rem; margin: 6px 0 8px; }
+.step p { font-size: .9rem; color: var(--ink-2); }
+.roles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 72px; }
+.role .core { padding: 30px 28px; height: 100%; }
+.role h3 { font-size: 1.5rem; margin-bottom: 16px; }
+.role ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.role li { display: flex; gap: 10px; font-size: .95rem; color: var(--ink-2); }
+.role li i { color: var(--leaf); font-size: 18px; margin-top: 2px; }
+.role.dark .core { background: var(--forest); color: #f1ede0; }
+.role.dark li { color: rgba(241,237,224,.8); }
+.role.dark li i { color: #e3c48c; }
+@media (max-width: 900px) {
+  .route { grid-template-columns: 1fr; gap: 28px; padding-left: 36px; }
+  .route::before { top: 0; bottom: 0; left: 9px; right: auto; width: 1px; height: auto; }
+  .step .dot { position: absolute; left: -36px; top: 2px; margin: 0; }
+  .roles { grid-template-columns: 1fr; }
+}
+
+/* ───────── MEDICIÓN ───────── */
+.measure { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: center; }
+.measure-photo img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 32px; margin-top: 32px; }
+.kpi b { display: block; font-weight: 500; margin-bottom: 4px; }
+.kpi p { font-size: .92rem; color: var(--ink-2); }
+@media (max-width: 767px) { .measure { grid-template-columns: 1fr; gap: 36px; } .kpis { grid-template-columns: 1fr; } }
+
+/* ───────── PLANES ───────── */
+.plans { display: grid; grid-template-columns: 1fr 1.08fr; gap: 20px; margin-top: 56px; align-items: stretch; }
+.plan .core { padding: 36px 32px; height: 100%; display: flex; flex-direction: column; }
+.plan h3 { font-size: 2rem; margin-bottom: 6px; }
+.plan .p-sub { font-size: .95rem; color: var(--ink-2); margin-bottom: 26px; max-width: 40ch; }
+.price-row { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.price-row .setup { font-family: var(--serif); font-size: 3.2rem; font-weight: 600; line-height: 1; letter-spacing: -.01em; }
+.price-row .setup sup { font-size: 1.4rem; vertical-align: .9em; margin-right: 2px; }
+.price-row .lbl { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.price-row .monthly { font-size: 1.3rem; font-weight: 600; color: var(--leaf); }
+.price-row .iva { width: 100%; font-size: 13px; color: var(--ink-3); }
+.plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.plan li { display: flex; gap: 10px; font-size: .95rem; color: var(--ink-2); }
+.plan li i { font-size: 18px; color: var(--leaf); margin-top: 2px; flex: 0 0 auto; }
+.plan li.off { color: var(--ink-3); opacity: .6; }
+.plan li.off i { color: var(--ink-3); }
+.plan.featured .core { background: var(--forest); color: #f1ede0; }
+.plan.featured .p-sub, .plan.featured li { color: rgba(241,237,224,.82); }
+.plan.featured li i { color: #e3c48c; }
+.plan.featured .price-row { border-color: rgba(241,237,224,.15); }
+.plan.featured .price-row .lbl, .plan.featured .price-row .iva { color: rgba(241,237,224,.55); }
+.plan.featured .monthly { color: #e3c48c; }
+.rec { align-self: flex-start; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: var(--amber); color: #1b130a; margin-bottom: 18px; }
+.plan-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+.plan-notes div { padding: 20px 22px; border-radius: var(--r-sm); background: var(--paper); font-size: .92rem; color: var(--ink-2); }
+.plan-notes b { color: var(--ink); font-weight: 500; }
+@media (max-width: 900px) { .plans, .plan-notes { grid-template-columns: 1fr; } }
+
+/* calculadora */
+.calc { margin-top: 56px; }
+.calc .core { display: grid; grid-template-columns: 1.4fr 1fr; }
+.calc-in { padding: 34px 32px; display: flex; flex-direction: column; gap: 26px; }
+.calc-head h3 { font-size: 1.6rem; margin-bottom: 6px; }
+.calc-head p { font-size: .92rem; color: var(--ink-2); }
+.presets { display: flex; gap: 6px; padding: 4px; border-radius: 999px; background: rgba(22,35,26,.06); width: max-content; max-width: 100%; }
+.presets button { font: 500 14px/1 var(--sans); padding: 10px 16px; border-radius: 999px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; transition: background-color 200ms ease, color 200ms ease, transform 160ms var(--ease-out); }
+.presets button:active { transform: scale(.97); }
+.presets button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(22,35,26,.15); }
+.slide-row label { display: flex; justify-content: space-between; gap: 12px; font-size: .95rem; margin-bottom: 10px; }
+.slide-row label span { color: var(--ink-3); font-size: 13px; }
+.slide-row .vals { display: flex; justify-content: space-between; font-size: 14px; margin-top: 8px; color: var(--ink-2); }
+.slide-row .vals b { color: var(--ink); font-weight: 600; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 4px; background: rgba(22,35,26,.12); outline: none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--forest); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--forest), 0 2px 6px rgba(22,35,26,.3); cursor: pointer; }
+input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--forest); border: 3px solid var(--paper); cursor: pointer; }
+input[type=range]:focus-visible { outline: 2px solid var(--amber); outline-offset: 6px; }
+.calc-out { background: var(--forest); color: #f1ede0; padding: 34px 30px; display: flex; flex-direction: column; justify-content: center; }
+.calc-out small { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,237,224,.6); }
+.calc-out .total { font-family: var(--serif); font-size: 4rem; font-weight: 600; line-height: 1; margin: 12px 0 6px; color: #e3c48c; }
+.calc-out .per { font-size: 14px; color: rgba(241,237,224,.7); }
+.calc-out p { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(241,237,224,.14); font-size: 13px; color: rgba(241,237,224,.6); }
+.calc-src { font-size: 13px; color: var(--ink-3); margin: 14px 6px 0; }
+@media (max-width: 767px) { .calc .core { grid-template-columns: 1fr; } .calc-in, .calc-out { padding: 26px 20px; } }
+
+/* ───────── FAQ ───────── */
+.faq { margin-top: 44px; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; font-size: 1.08rem; font-weight: 500; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary i { font-size: 20px; color: var(--leaf); transition: transform 300ms var(--ease-out); flex: 0 0 auto; }
+.faq details[open] summary i { transform: rotate(45deg); }
+.faq details p { padding: 0 0 24px; color: var(--ink-2); max-width: 66ch; }
+.faq details[open] p { animation: faqIn 400ms var(--ease-out); }
+@keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.faq summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; border-radius: 6px; }
+
+/* ───────── CIERRE ───────── */
+.close { position: relative; color: #f4f0e2; overflow: hidden; padding: 140px 0; background: var(--forest); }
+.close img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+.close::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(14,28,19,.92) 0%, rgba(14,28,19,.6) 60%, rgba(14,28,19,.35) 100%); }
+.close .wrap { position: relative; z-index: 2; }
+.close h2 { font-size: var(--step-4); max-width: 14ch; }
+.close h2 em { color: #e3c48c; }
+.close-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 220px)); gap: 28px; margin: 40px 0 44px; }
+.close-steps div { border-top: 1px solid rgba(244,240,226,.3); padding-top: 14px; font-size: .95rem; color: rgba(244,240,226,.85); }
+.close-steps b { display: block; font-family: var(--serif); font-size: 1.4rem; color: #e3c48c; font-weight: 600; margin-bottom: 4px; }
+@media (max-width: 767px) { .close { padding: 96px 0; } .close-steps { grid-template-columns: 1fr; gap: 18px; } }
+
+footer { padding: 36px 0 48px; font-size: 13px; color: var(--ink-3); }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+.print { position: fixed; right: 20px; bottom: 20px; z-index: 30; padding: 6px 6px 6px 18px; font-size: 13px; background: var(--ink); color: var(--paper); }
+.print .ico { width: 30px; height: 30px; font-size: 15px; background: rgba(248,247,242,.14); }
+
+@media print {
+  body::after, .print, .hero-actions { display: none !important; }
+  .reveal, .msg { opacity: 1 !important; transform: none !important; filter: none !important; }
+  section { padding: 48px 0; break-inside: avoid-page; }
+  .hero { min-height: 70vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- ───────── HERO ───────── -->
+<header class="hero">
+  <img class="hero-img" src="img/hero-selva.jpg" alt="Dosel de la selva amazónica al amanecer">
+  <div class="hero-top">
+    <div class="wrap">
+      <div class="brand-pair"><img src="img/logo-claro.png" alt="Quntus Aromas Selváticos"><span class="x">con</span><span>Invers</span></div>
+      <div class="hero-date">Propuesta para Ivonne Mosler, octubre 2026</div>
+    </div>
+  </div>
+  <div class="hero-body">
+    <div class="wrap">
+      <h1 class="reveal">Del Amazonas a cada hogar, <em>sin que tengas que hacer marketing.</em></h1>
+      <p class="reveal" style="--i:1">Una tienda en línea que vende por ti, mientras tú produces y despachas.</p>
+      <div class="hero-actions reveal" style="--i:2">
+        <a class="btn" href="#experiencia">Ver cómo funcionaría <span class="ico"><i class="ph-light ph-arrow-down-right"></i></span></a>
+        <a class="btn ghost" href="#planes">Ver planes <span class="ico"><i class="ph-light ph-arrow-down-right"></i></span></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ───────── LO QUE ESCUCHAMOS ───────── -->
+<section>
+  <div class="wrap listen">
+    <figure class="listen-photo reveal">
+      <div class="shell"><div class="core"><img src="img/destilacion.jpg" alt="Rafael destilando aceite esencial frente a un grupo de visitantes" loading="lazy"></div></div>
+      <figcaption class="caption">Destilación en Quntus durante uno de los tours aromáticos.</figcaption>
+    </figure>
+    <div>
+      <span class="tag reveal">Lo que escuchamos</span>
+      <h2 class="reveal" style="--i:1">Un producto extraordinario <em>sin un sistema que lo venda.</em></h2>
+      <p class="lead reveal" style="--i:2">Quntus ya tiene lo más difícil: aceites que nadie más produce, 20 años de oficio y una causa real. Lo que falta es el camino entre ese frasco y la persona que lo necesita.</p>
+
+      <div class="pains">
+        <div class="pain reveal"><i class="ph-light ph-hourglass-medium"></i><div><h3>El canal B2B es lento</h3><p>Entre la primera muestra y la primera orden pueden pasar dos o tres años, y el flujo de caja depende de pocos clientes grandes.</p></div></div>
+        <div class="pain reveal"><i class="ph-light ph-plugs"></i><div><h3>La tienda y el CRM quedaron a medio camino</h3><p>La tienda en Shopify está incompleta y el CRM que se contrató quedó sin automatizaciones ni conexión con la tienda o con Meta.</p></div></div>
+        <div class="pain reveal"><i class="ph-light ph-device-mobile-camera"></i><div><h3>El marketing depende de ti, y no es lo tuyo</h3><p>Publicar, responder y dar seguimiento le quita tiempo a producir y a cuidar la relación con las comunidades.</p></div></div>
+        <div class="pain reveal"><i class="ph-light ph-book-open-text"></i><div><h3>El mercado aún no sabe para qué sirve un aceite esencial</h3><p>En Ecuador falta educación, y anunciar beneficios de salud de forma directa ya provocó un bloqueo en Meta.</p></div></div>
+      </div>
+
+      <blockquote class="quote reveal">"Cuando se les explica todo, la gente se queda maravillada: tengo una medicina, no es solo oler rico."<cite>Ivonne Mosler, en nuestra reunión del 8 de octubre</cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CIFRAS ───────── -->
+<div class="figures">
+  <div class="wrap">
+    <div class="fig-grid">
+      <div class="fig reveal"><b class="num">140.000</b><span>frascos posibles con los 1.400 litros de palo santo que ya tienes</span></div>
+      <div class="fig reveal" style="--i:1"><b class="num">2 a 3</b><span>años que puede tomar cerrar un cliente B2B</span></div>
+      <div class="fig reveal" style="--i:2"><b class="num">4</b><span>aromas que tu esposo descubrió y que no existen en ningún otro lugar</span></div>
+    </div>
+    <p class="fig-note reveal">La capacidad de producción no es el límite. El límite hoy es el canal de venta.</p>
+  </div>
+</div>
+
+<!-- ───────── ACEITES ───────── -->
+<section>
+  <div class="wrap">
+    <h2 class="reveal">Empezar con tres aceites <em>para crecer rápido.</em></h2>
+    <p class="lead reveal" style="--i:1">La tienda tendrá todo el catálogo, pero la venta arranca con tres productos de entrada. Quien prueba el palo santo vuelve por el ishpingo, el copal y los aromas que vengan después.</p>
+
+    <div class="oils">
+      <article class="oil big shell reveal">
+        <div class="core">
+          <img src="img/palo-santo.jpg" alt="Frasco de aceite esencial de palo santo Quntus" loading="lazy">
+          <div class="oil-body">
+            <span class="oil-role">La puerta de entrada</span>
+            <h3>Palo santo</h3>
+            <p>Tu producto estrella y el más conocido. Con 1.400 litros en inventario, es el que soporta el volumen.</p>
+            <span class="oil-price num">$15 por frasco</span>
+          </div>
+        </div>
+      </article>
+      <article class="oil small shell reveal" style="--i:1">
+        <div class="core">
+          <img src="img/ishpingo.jpg" alt="Frasco de aceite esencial de ishpingo Quntus" loading="lazy">
+          <div class="oil-body">
+            <span class="oil-role">La segunda compra</span>
+            <h3>Ishpingo</h3>
+            <p>Amazónico y único. Ideal para el combo con palo santo.</p>
+            <span class="oil-price num">$13 por frasco</span>
+          </div>
+        </div>
+      </article>
+      <article class="oil small shell reveal" style="--i:2">
+        <div class="core">
+          <img src="img/copal.jpg" alt="Frasco de aceite esencial de copal Quntus" loading="lazy">
+          <div class="oil-body">
+            <span class="oil-role">El de mayor valor</span>
+            <h3>Copal</h3>
+            <p>Precio alto e inventario corto. Funciona como pieza premium dentro de los kits.</p>
+            <span class="oil-price num">$40 por frasco</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── PERFILES ───────── -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 class="reveal">Cuatro perfiles, <em>cuatro razones de compra.</em></h2>
+    <p class="lead reveal" style="--i:1">Con la oferta definida, lanzamos anuncios con un mensaje propio para cada perfil. El que mejor responde nos dice dónde invertir.</p>
+    <div class="profiles">
+      <div class="profile reveal"><i class="ph-light ph-flower-lotus"></i><h3>Yoga y meditación</h3><p>Ya usa aromaterapia. Busca pureza, origen y rituales.</p></div>
+      <div class="profile reveal" style="--i:1"><i class="ph-light ph-hand-heart"></i><h3>Spas y terapeutas</h3><p>Compra en volumen y de forma recurrente. Le interesan los combos.</p></div>
+      <div class="profile reveal" style="--i:2"><i class="ph-light ph-flask"></i><h3>Perfumería artesanal</h3><p>Busca aromas que nadie más tiene. Aquí brillan los aromas amazónicos.</p></div>
+      <div class="profile reveal" style="--i:3"><i class="ph-light ph-tree-evergreen"></i><h3>Compra consciente</h3><p>Elige al productor pequeño y la causa: cada frasco ayuda a frenar la deforestación.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── ASÍ SERÍA TRABAJAR CON INVERS ───────── -->
+<section class="exp" id="experiencia">
+  <div class="wrap">
+    <span class="tag reveal">Así sería trabajar juntos</span>
+    <h2 class="reveal" style="--i:1">Tú produces y despachas. <em>El sistema vende.</em></h2>
+    <p class="lead reveal" style="--i:2">Así se vería un día normal de Quntus con el sistema funcionando, desde que una persona descubre el palo santo hasta que el pedido llega a tu teléfono.</p>
+
+    <div class="exp-grid">
+      <div>
+        <div class="exp-label reveal"><i class="ph-light ph-storefront"></i>Así vería tu tienda una clienta</div>
+        <div class="dshell reveal" style="--i:1">
+          <div class="pdp">
+            <img src="img/palo-santo.jpg" alt="Palo santo Quntus en la tienda" loading="lazy">
+            <form class="pdp-body" onsubmit="return false">
+              <span class="pdp-kicker">Quntus, Aromas Selváticos</span>
+              <h3>Palo santo</h3>
+              <p class="pdp-desc">Destilado en la Amazonía ecuatoriana por la misma familia desde hace 20 años.</p>
+              <div class="uses"><span>Difusor</span><span>Masaje</span><span>Meditación</span><span>Inhalación</span></div>
+              <div class="combos" role="radiogroup" aria-label="Elige tu presentación">
+                <label class="combo"><input type="radio" name="combo" value="15"><span class="c-name">1 frasco<small>10 ml</small></span><span class="c-price num">$15</span></label>
+                <label class="combo"><input type="radio" name="combo" value="39" checked><span class="c-name"><span>Ritual x3 <span class="badge">Favorito</span></span><small>3 frascos de palo santo</small></span><span class="c-price num">$39</span></label>
+                <label class="combo"><input type="radio" name="combo" value="59"><span class="c-name">Kit Amazonía<small>Palo santo, ishpingo y copal</small></span><span class="c-price num">$59</span></label>
+              </div>
+              <button class="btn add" type="button">Agregar al carrito <span class="num" id="add-price">$39</span></button>
+            </form>
+          </div>
+        </div>
+
+        <div class="exp-label reveal" style="margin-top:36px"><i class="ph-light ph-bell-ringing"></i>Lo que llega a tu teléfono</div>
+        <div class="notifs">
+          <div class="notif reveal"><div class="n-ico"><img src="img/logo-verde.png" alt=""></div><div><b>Nuevo pedido: Kit Amazonía</b><span>$59, envío a Cuenca</span></div><time>09:42</time></div>
+          <div class="notif reveal" style="--i:1"><div class="n-ico"><img src="img/logo-verde.png" alt=""></div><div><b>Carrito recuperado: Ritual x3</b><span>$39, la clienta volvió con el recordatorio</span></div><time>11:15</time></div>
+          <div class="notif reveal" style="--i:2"><div class="n-ico"><img src="img/logo-verde.png" alt=""></div><div><b>Tu reporte semanal está listo</b><span>Ventas, costo por venta y anuncio ganador</span></div><time>Lun</time></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="exp-label reveal"><i class="ph-light ph-whatsapp-logo"></i>El asistente digital atendiendo por ti</div>
+        <div class="dshell reveal" style="--i:1">
+          <div class="chat" id="chat">
+            <div class="chat-head"><div class="av"><img src="img/logo-verde.png" alt=""></div><div><b>Quntus Aromas</b><small>Asistente digital, responde al instante</small></div></div>
+            <div class="chat-body">
+              <div class="msg in-msg" style="--m:0">Hola, vi el anuncio del palo santo. ¿Cómo se usa para un masaje?<time>21:04</time></div>
+              <div class="msg out-msg" style="--m:1">Hola, Andrea. Mezcla 3 gotas de palo santo con una cucharada de aceite de oliva o de ajonjolí y masajea la zona con calma. Te comparto nuestra guía con los cuatro modos de uso.<span class="link"><i class="ph-light ph-file-text"></i> Guía de modos de uso Quntus</span><time>21:04</time></div>
+              <div class="msg in-msg" style="--m:2">Qué lindo. ¿Hacen envíos a Cuenca?<time>21:06</time></div>
+              <div class="msg out-msg" style="--m:3">Sí, enviamos a todo Ecuador. Muchas clientas empiezan con el Ritual x3 a $39. ¿Te dejo el enlace para comprarlo?<span class="link"><i class="ph-light ph-shopping-bag"></i> quntus-as.com/ritual-palo-santo</span><time>21:06</time></div>
+              <div class="msg in-msg" style="--m:4">Sí, por favor.<time>21:07</time></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="week">
+          <div class="exp-label reveal" style="margin-top:36px"><i class="ph-light ph-calendar-dots"></i>Una semana con Invers</div>
+          <div class="week-row reveal"><b>Cada día</b><p>Los pedidos llegan a tu teléfono. Tú empacas y entregas al courier. El asistente responde a los clientes.</p></div>
+          <div class="week-row reveal" style="--i:1"><b>Lunes</b><p>Recibes el reporte: cuánto vendiste, cuánto costó cada venta y qué anuncio funcionó mejor.</p></div>
+          <div class="week-row reveal" style="--i:2"><b>Miércoles</b><p>30 minutos con tu equipo de Invers para revisar avances y tomar decisiones juntos.</p></div>
+          <div class="week-row reveal" style="--i:3"><b>Cada mes</b><p>Reunión de estrategia: qué producto empujar, qué combo probar y cuándo sumar un aroma nuevo.</p></div>
+          <p class="week-note">Ejemplos ilustrativos. Combos, precios y textos finales se definen contigo en la sesión de oferta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LO QUE CONSTRUIMOS ───────── -->
+<section>
+  <div class="wrap">
+    <h2 class="reveal">Lo que construimos <em>y operamos por ti.</em></h2>
+    <p class="lead reveal" style="--i:1">Todo conectado en SmartInvers CRM: tienda, anuncios, mensajes y seguimiento en un solo lugar.</p>
+    <div class="system">
+      <div class="sys reveal">
+        <i class="ph-light ph-compass"></i>
+        <h3>La oferta</h3>
+        <p>Antes de diseñar o anunciar, definimos qué vendemos, a quién y por qué debería comprarlo hoy.</p>
+        <ul><li>Sesión de verbalización de la oferta contigo</li><li>Combos y presentaciones para subir el valor de cada compra</li><li>Guía digital de modos de uso como regalo con la compra</li><li>Mensajes que educan sin romper las políticas de Meta</li></ul>
+      </div>
+      <div class="sys reveal" style="--i:1">
+        <i class="ph-light ph-storefront"></i>
+        <h3>La tienda</h3>
+        <p>Una tienda nueva, a la altura de tus frascos, que explica el origen, el uso y el resultado de cada aceite.</p>
+        <ul><li>Diseño con la identidad amazónica de Quntus</li><li>Fotos de producto mejoradas con IA a partir de las que ya tienes</li><li>Combos en la página de compra</li><li>Conectada a pagos, inventario y SmartInvers CRM</li></ul>
+      </div>
+      <div class="sys reveal">
+        <i class="ph-light ph-target"></i>
+        <h3>Los anuncios</h3>
+        <p>Estudio de mercado en vivo: probamos perfiles y mensajes, y movemos el presupuesto hacia lo que vende.</p>
+        <ul><li>Estrategia y gestión de campañas en Facebook e Instagram</li><li>Piezas para los anuncios creadas con IA según la estrategia</li><li>Testimonios de clientes integrados a la tienda y los anuncios</li><li>Reporte de qué perfil y qué mensaje vende más</li></ul>
+      </div>
+      <div class="sys reveal" style="--i:1">
+        <i class="ph-light ph-arrows-clockwise"></i>
+        <h3>La recompra</h3>
+        <p>Traer clientes es la mitad. La otra mitad, la que más rinde, es que vuelvan.</p>
+        <ul><li>Asistente digital en WhatsApp e Instagram, las 24 horas</li><li>Recuperación de carritos abandonados</li><li>Seguimiento posventa: uso, recompra y aromas nuevos</li><li>Aviso de cada pedido en tu teléfono</li></ul>
+      </div>
+    </div>
+    <div class="scope-note reveal"><i class="ph-light ph-info"></i><p><b>Sobre el contenido:</b> no producimos contenido para redes sociales. Todo lo que creamos está al servicio de la estrategia de venta: las fotos de producto y las piezas de la tienda y de los anuncios, hechas con herramientas de IA. Tú no tienes que grabarte ni publicar.</p></div>
+  </div>
+</section>
+
+<!-- ───────── RUTA ───────── -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 class="reveal">De la conversación a la primera venta <em>en seis semanas.</em></h2>
+    <p class="lead reveal" style="--i:1">Ruta del Plan Ecosistema. El Plan Esencial se entrega en cuatro semanas, sin las etapas de anuncios.</p>
+    <div class="route">
+      <div class="step reveal"><div class="dot"></div><small>Semana 1</small><h3>La oferta</h3><p>Entrevista contigo para definir valor, perfiles e historia. Recibimos accesos y fotos.</p></div>
+      <div class="step reveal" style="--i:1"><div class="dot"></div><small>Semanas 2 y 3</small><h3>La tienda</h3><p>Combos, precios, guía de uso, diseño de la tienda y fotos con IA. Tú reúnes testimonios.</p></div>
+      <div class="step reveal" style="--i:2"><div class="dot"></div><small>Semana 4</small><h3>El sistema</h3><p>Conectamos tienda, WhatsApp, Instagram y correo. Activamos asistente y seguimientos.</p></div>
+      <div class="step reveal" style="--i:3"><div class="dot"></div><small>Semana 5</small><h3>El lanzamiento</h3><p>Salen los anuncios para los cuatro perfiles, con 200 frascos listos y empacados.</p></div>
+      <div class="step reveal" style="--i:4"><div class="dot"></div><small>Semana 6 en adelante</small><h3>La escala</h3><p>Concentramos la inversión en lo que vende y sumamos aromas al catálogo activo.</p></div>
+    </div>
+
+    <div class="roles">
+      <div class="role dark shell reveal"><div class="core">
+        <h3>Lo que hace Invers</h3>
+        <ul>
+          <li><i class="ph-light ph-check"></i>Estrategia, oferta y mensajes de venta</li>
+          <li><i class="ph-light ph-check"></i>Diseño y desarrollo de la tienda</li>
+          <li><i class="ph-light ph-check"></i>Fotos de producto y piezas de anuncios con IA</li>
+          <li><i class="ph-light ph-check"></i>Gestión de campañas en Meta</li>
+          <li><i class="ph-light ph-check"></i>SmartInvers CRM, asistente digital y automatizaciones</li>
+          <li><i class="ph-light ph-check"></i>Reporte semanal y reunión mensual</li>
+        </ul>
+      </div></div>
+      <div class="role shell reveal" style="--i:1"><div class="core">
+        <h3>Lo que necesitamos de Quntus</h3>
+        <ul>
+          <li><i class="ph-light ph-check"></i>Una sesión de 60 a 90 minutos para la oferta</li>
+          <li><i class="ph-light ph-check"></i>Accesos a Shopify, Meta y redes sociales</li>
+          <li><i class="ph-light ph-check"></i>Fotos existentes y testimonios de clientes</li>
+          <li><i class="ph-light ph-check"></i>Stock empacado antes del lanzamiento</li>
+          <li><i class="ph-light ph-check"></i>Despacho de pedidos con un courier aliado</li>
+          <li><i class="ph-light ph-check"></i>30 minutos a la semana para revisar avances</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── MEDICIÓN ───────── -->
+<section style="padding-top:0">
+  <div class="wrap measure">
+    <figure class="measure-photo reveal">
+      <div class="shell"><div class="core"><img src="img/tour.jpg" alt="Visitantes recorriendo el bosque durante un tour aromático de Quntus" loading="lazy"></div></div>
+      <figcaption class="caption">Tour aromático en la finca de Quntus.</figcaption>
+    </figure>
+    <div>
+      <h2 class="reveal">Números simples, <em>cada semana.</em></h2>
+      <p class="lead reveal" style="--i:1">Un tablero para saber cuánto vende la tienda y de dónde viene cada venta.</p>
+      <div class="kpis">
+        <div class="kpi reveal"><b>Ventas y pedidos</b><p>Ingresos por semana y por aceite.</p></div>
+        <div class="kpi reveal" style="--i:1"><b>Ticket promedio</b><p>Cuánto gasta cada cliente. Los combos buscan subirlo.</p></div>
+        <div class="kpi reveal"><b>Costo por venta</b><p>Lo que cuesta en anuncios cada pedido, por perfil.</p></div>
+        <div class="kpi reveal" style="--i:1"><b>Carritos recuperados</b><p>Ventas rescatadas por el seguimiento automático.</p></div>
+        <div class="kpi reveal"><b>Recompra</b><p>Clientes que vuelven por otro aceite en 60 días.</p></div>
+        <div class="kpi reveal" style="--i:1"><b>Tiempo de respuesta</b><p>Con el asistente digital, segundos.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── PLANES ───────── -->
+<section id="planes" style="padding-top:0">
+  <div class="wrap">
+    <span class="tag reveal">Inversión</span>
+    <h2 class="reveal" style="--i:1">Dos caminos, <em>según el ritmo que quieras.</em></h2>
+    <p class="lead reveal" style="--i:2">Ambos incluyen la tienda nueva y SmartInvers CRM. La diferencia es quién trae a los compradores: tú o Invers.</p>
+
+    <div class="plans">
+      <article class="plan shell reveal"><div class="core">
+        <h3>Plan Esencial</h3>
+        <p class="p-sub">La base para vender en línea sin perder ninguna venta. Tú atraes el tráfico y el sistema convierte y da seguimiento.</p>
+        <div class="price-row">
+          <div><span class="lbl">Implementación</span><span class="setup num"><sup>$</sup>1.797</span></div>
+          <div><span class="lbl">Mensual</span><span class="monthly num">$397</span></div>
+          <span class="iva">Valores más IVA</span>
+        </div>
+        <ul>
+          <li><i class="ph-light ph-check"></i>Tienda nueva diseñada y conectada</li>
+          <li><i class="ph-light ph-check"></i>Fotos de producto mejoradas con IA</li>
+          <li><i class="ph-light ph-check"></i>SmartInvers CRM configurado</li>
+          <li><i class="ph-light ph-check"></i>Asistente digital en WhatsApp e Instagram</li>
+          <li><i class="ph-light ph-check"></i>Carrito abandonado y avisos de pedido</li>
+          <li><i class="ph-light ph-check"></i>Seguimiento posventa automático</li>
+          <li><i class="ph-light ph-check"></i>Reporte mensual</li>
+          <li class="off"><i class="ph-light ph-minus"></i>Verbalización y diseño de la oferta</li>
+          <li class="off"><i class="ph-light ph-minus"></i>Gestión de campañas en Meta</li>
+          <li class="off"><i class="ph-light ph-minus"></i>Piezas para anuncios con IA</li>
+        </ul>
+      </div></article>
+
+      <article class="plan featured shell reveal" style="--i:1"><div class="core">
+        <span class="rec">Recomendado</span>
+        <h3>Plan Ecosistema</h3>
+        <p class="p-sub">Todo el sistema de ventas operado por Invers, desde la oferta hasta la recompra. Tú produces y despachas.</p>
+        <div class="price-row">
+          <div><span class="lbl">Implementación</span><span class="setup num"><sup>$</sup>2.797</span></div>
+          <div><span class="lbl">Mensual</span><span class="monthly num">$797</span></div>
+          <span class="iva">Valores más IVA. La inversión en anuncios se paga aparte, directo a Meta.</span>
+        </div>
+        <ul>
+          <li><i class="ph-light ph-check"></i>Todo lo del Plan Esencial</li>
+          <li><i class="ph-light ph-check"></i>Verbalización y diseño de la oferta</li>
+          <li><i class="ph-light ph-check"></i>Combos y estrategia de precios</li>
+          <li><i class="ph-light ph-check"></i>Guía digital de modos de uso</li>
+          <li><i class="ph-light ph-check"></i>Estudio de mercado con cuatro perfiles</li>
+          <li><i class="ph-light ph-check"></i>Gestión mensual de campañas en Meta</li>
+          <li><i class="ph-light ph-check"></i>Piezas para anuncios creadas con IA según la estrategia</li>
+          <li><i class="ph-light ph-check"></i>Recopilación guiada de testimonios</li>
+          <li><i class="ph-light ph-check"></i>Reporte semanal y reunión mensual de estrategia</li>
+        </ul>
+      </div></article>
+    </div>
+
+    <div class="plan-notes">
+      <div class="reveal"><b>Inversión en anuncios.</b> Se paga directo a Meta con tu tarjeta y no pasa por Invers. Recomendamos empezar con $300 a $500 al mes durante el estudio de mercado y subir cuando el costo por venta esté validado.</div>
+      <div class="reveal" style="--i:1"><b>Envíos.</b> El costo de envío lo asume Quntus o se traslada al cliente en la tienda. Te ayudamos a elegir el courier y a configurar las tarifas.</div>
+    </div>
+
+    <div class="calc shell reveal">
+      <div class="core">
+        <div class="calc-in">
+          <div class="calc-head">
+            <h3>Costos de uso por mensajes</h3>
+            <p>Lo que cobra WhatsApp por mensaje y lo que cuestan los correos. Mueve los controles según el volumen que esperas.</p>
+          </div>
+          <div class="presets" role="group" aria-label="Etapa de la tienda">
+            <button type="button" data-p="start" aria-pressed="true">Arranque</button>
+            <button type="button" data-p="grow" aria-pressed="false">Crecimiento</button>
+            <button type="button" data-p="scale" aria-pressed="false">Escala</button>
+          </div>
+          <div class="slide-row">
+            <label for="sl-util">WhatsApp: confirmaciones y seguimiento <span>$0,0113 c/u</span></label>
+            <input type="range" id="sl-util" min="0" max="10000" step="50">
+            <div class="vals"><span><b class="num" id="v-util"></b> mensajes</span><span class="num" id="r-util"></span></div>
+          </div>
+          <div class="slide-row">
+            <label for="sl-mkt">WhatsApp: promociones y recompra <span>$0,074 c/u</span></label>
+            <input type="range" id="sl-mkt" min="0" max="5000" step="50">
+            <div class="vals"><span><b class="num" id="v-mkt"></b> mensajes</span><span class="num" id="r-mkt"></span></div>
+          </div>
+          <div class="slide-row">
+            <label for="sl-email">Correos enviados <span>$0,675 por 1.000</span></label>
+            <input type="range" id="sl-email" min="0" max="30000" step="500">
+            <div class="vals"><span><b class="num" id="v-email"></b> correos</span><span class="num" id="r-email"></span></div>
+          </div>
+        </div>
+        <div class="calc-out">
+          <small>Total estimado</small>
+          <div class="total num" id="total">$0</div>
+          <span class="per">al mes, solo costos de uso</span>
+          <p>No incluye la mensualidad de Invers, la inversión en anuncios ni los envíos.</p>
+        </div>
+      </div>
+    </div>
+    <p class="calc-src">Tarifas oficiales de WhatsApp Business para Latinoamérica. Las respuestas a mensajes que inicia el cliente dentro de 24 horas no tienen costo.</p>
+  </div>
+</section>
+
+<!-- ───────── FAQ ───────── -->
+<section style="padding-top:0">
+  <div class="wrap narrow">
+    <h2 class="reveal">Antes de decidir</h2>
+    <div class="faq">
+      <details><summary>¿Ustedes crean contenido para mis redes sociales?<i class="ph-light ph-plus"></i></summary><p>No. Diseñamos la estrategia de venta y, con herramientas de IA, creamos las fotos de producto y las piezas que usan la tienda y los anuncios. Las publicaciones orgánicas en redes no están incluidas, y tú no tienes que grabarte.</p></details>
+      <details><summary>¿Necesito contratar personal adicional?<i class="ph-light ph-plus"></i></summary><p>No. El asistente digital responde preguntas y da seguimiento. Tú recibes cada pedido en el teléfono y te encargas del despacho. Si el volumen crece mucho, lo primero que conviene sumar es apoyo en empaque y envío.</p></details>
+      <details><summary>¿Cómo comunicamos los beneficios sin que Meta bloquee la cuenta?<i class="ph-light ph-plus"></i></summary><p>Los anuncios hablan de experiencias, rituales y modos de uso, no de curar enfermedades. La información más profunda va en la tienda, en la guía de uso y en la conversación con el asistente, donde las reglas de los anuncios no aplican.</p></details>
+      <details><summary>¿Se aprovecha lo que ya tengo en Shopify y en el CRM?<i class="ph-light ph-plus"></i></summary><p>Sí. El catálogo, el inventario y la cuenta de Shopify se mantienen. Se rehace el diseño y la comunicación de la tienda, y la automatización pasa a SmartInvers CRM, conectado de punta a punta.</p></details>
+      <details><summary>¿Puedo empezar con el Plan Esencial y luego subir?<i class="ph-light ph-plus"></i></summary><p>Sí. Si pasas al Plan Ecosistema, pagas solo la diferencia de la implementación ($1.000) y la mensualidad se ajusta desde el mes del cambio.</p></details>
+      <details><summary>¿Cuántos frascos debo tener listos para el lanzamiento?<i class="ph-light ph-plus"></i></summary><p>Recomendamos 200 frascos empacados entre palo santo, ishpingo y copal. Durante el estudio de mercado ajustamos según lo que más se venda, para que no inmovilices inventario de más.</p></details>
+      <details><summary>¿En cuánto tiempo se recupera la inversión?<i class="ph-light ph-plus"></i></summary><p>Depende del costo por venta que validemos en el estudio de mercado. Como referencia, la mensualidad del Plan Esencial equivale a unos 27 frascos de palo santo al mes y la del Plan Ecosistema a unos 53. Con combos, el número de pedidos necesario baja. Los primeros datos firmes llegan entre las semanas 6 y 10, y la tendencia se consolida al tercer mes.</p></details>
+      <details><summary>¿Quién es dueño de los datos y de la tienda?<i class="ph-light ph-plus"></i></summary><p>Quntus. La tienda, la cuenta de anuncios, los clientes y su historial son tuyos. Si un día dejamos de trabajar juntos, te entregamos todo exportado.</p></details>
+      <details><summary>¿Qué hace el asistente digital cuando no sabe responder?<i class="ph-light ph-plus"></i></summary><p>Te avisa y te pasa la conversación con todo el contexto. Esas respuestas se suman a su base de conocimiento para que la próxima vez responda solo.</p></details>
+      <details><summary>¿Cuánto dura el contrato y cómo se paga?<i class="ph-light ph-plus"></i></summary><p>Proponemos un plazo inicial de seis meses y después mes a mes. La implementación se paga 50% al firmar y 50% al entregar la tienda y el sistema. La mensualidad corre desde el lanzamiento.</p></details>
+      <details><summary>¿Esto es solo para Ecuador?<i class="ph-light ph-plus"></i></summary><p>Arrancamos en Ecuador para validar la oferta y la logística con costos controlados. Una vez validado, el mismo sistema se abre a otros países sumando campañas y opciones de envío.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CIERRE ───────── -->
+<section class="close">
+  <img class="bg" src="img/rio-aereo.jpg" alt="" loading="lazy">
+  <div class="wrap">
+    <h2 class="reveal">Que el Amazonas llegue <em>a más hogares.</em></h2>
+    <div class="close-steps">
+      <div class="reveal"><b>Hoy</b>Revisamos juntos la propuesta y eliges tu plan.</div>
+      <div class="reveal" style="--i:1"><b>Esta semana</b>Firmamos y agendamos la sesión de oferta.</div>
+      <div class="reveal" style="--i:2"><b>En seis semanas</b>Tu tienda está vendiendo.</div>
+    </div>
+    <a class="btn reveal" style="--i:3" href="mailto:fernando.a@invers.ai?subject=Propuesta%20Quntus%20Aromas">Escribir a Fernando <span class="ico"><i class="ph-light ph-arrow-up-right"></i></span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>Invers, propuesta para Quntus Aromas Selváticos</span><span>Octubre 2026, vigencia de 15 días</span></div>
+</footer>
+
+<button class="btn print" type="button" onclick="window.print()">Descargar PDF <span class="ico"><i class="ph-light ph-download-simple"></i></span></button>
+
+<script>
+// Reveal al entrar en pantalla
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+document.querySelectorAll('.reveal, #chat').forEach(el => io.observe(el));
+
+// Ficha de producto: el botón refleja el combo elegido
+document.querySelectorAll('.combo input').forEach(r => r.addEventListener('change', () => {
+  document.getElementById('add-price').textContent = '$' + r.value;
+}));
+
+// Calculadora de costos de uso
+const RATES = { util: 0.0113, mkt: 0.074, email: 0.675 / 1000 };
+const PRESETS = {
+  start: { util: 400,  mkt: 200,  email: 2000 },
+  grow:  { util: 1500, mkt: 800,  email: 8000 },
+  scale: { util: 5000, mkt: 2500, email: 25000 }
+};
+const money = n => '$' + n.toLocaleString('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function calc() {
+  let total = 0;
+  Object.keys(RATES).forEach(k => {
+    const v = +document.getElementById('sl-' + k).value;
+    const r = v * RATES[k];
+    total += r;
+    document.getElementById('v-' + k).textContent = v.toLocaleString('es-EC');
+    document.getElementById('r-' + k).textContent = money(r);
+  });
+  document.getElementById('total').textContent = money(total);
+}
+function setPreset(name) {
+  Object.keys(RATES).forEach(k => { document.getElementById('sl-' + k).value = PRESETS[name][k]; });
+  document.querySelectorAll('.presets button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === name));
+  calc();
+}
+document.querySelectorAll('.presets button').forEach(b => b.addEventListener('click', () => setPreset(b.dataset.p)));
+Object.keys(RATES).forEach(k => document.getElementById('sl-' + k).addEventListener('input', calc));
+setPreset('start');
+</script>
+</body>
+</html>
